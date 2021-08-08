@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="529db5ff-9f47-48b8-94fc-53d921c6f008" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+      <para>
+        This is Help Documentation of <application>BUILDLet Class Library for JBIG Image</application>.
+      </para>
+    </introduction>
+
+		<section>
+      <title>Namespaces</title>
+      <content>
+        <para>
+          This Help Documentation describes about the following namespaces.
+        </para>
+        <table>
+
+          <!-- Table Header -->
+          <tableHeader>
+            <row>
+              <entry>
+                <para>Namespace</para>
+              </entry>
+              <entry>
+                <para>Description</para>
+              </entry>
+            </row>
+          </tableHeader>
+
+          <!-- BUILDLet.Imaging.Jbig -->
+          <row>
+            <entry>
+              <para>
+                <codeEntityReference qualifyHint="true">N:BUILDLet.Imaging.Jbig</codeEntityReference>
+              </para>
+            </entry>
+            <entry>
+              <para>
+                <!-- Namespace Summaries -->
+                <codeEntityReference qualifyHint="true">N:BUILDLet.Imaging.Jbig</codeEntityReference>
+                名前空間には、JBIG (Joint Bi-level Image experts Group) 画像ファイルを扱うためのユーティリティー クラスが含まれます。
+              </para>
+            </entry>
+          </row>
+
+        </table>
+      </content>
+		</section>
+
+		<relatedTopics>
+			<link xlink:href="dd266954-6be8-4bb6-b468-0671d2f392fb" />
+		</relatedTopics>
+	</developerConceptualDocument>
+</topic>

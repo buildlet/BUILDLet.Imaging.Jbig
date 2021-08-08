@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="83b6c065-a02d-4361-9b79-e3cbf99f8742" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>
+        Version 1.0.0 was released on August 8th, 2021.
+      </para>
+		</introduction>
+
+		<section>
+			<title>Changes in This Release</title>
+			<content>
+				<list class="bullet">
+          
+					<listItem>
+						<para>
+              1st Release.
+            </para>
+					</listItem>
+          
+				</list>
+			</content>
+		</section>
+
+		<relatedTopics>
+			<link xlink:href="dd266954-6be8-4bb6-b468-0671d2f392fb" />
+		</relatedTopics>
+
+	</developerConceptualDocument>
+</topic>
