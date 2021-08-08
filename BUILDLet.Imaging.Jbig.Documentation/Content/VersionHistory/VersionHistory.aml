@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="dd266954-6be8-4bb6-b468-0671d2f392fb" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>
+        The topics in this section describe the various changes made to the 
+        <application>BUILDLet Class Library for JBIG Image</application> 
+        over the life of the project.
+      </para>
+		</introduction>
+
+		<section>
+			<title>Version History</title>
+			<content>
+				<para>Select a version below to see a description of its changes.</para>
+				<list class="bullet">
+          
+          <!-- Version 1.0.0 -->
+					<listItem>
+						<para><link xlink:href="83b6c065-a02d-4361-9b79-e3cbf99f8742" /></para>
+					</listItem>
+
+          <!--
+					<listItem>
+						<para>[TODO: Add links to each specific version page]</para>
+					</listItem>
+          -->
+
+        </list>
+			</content>
+		</section>
+
+		<relatedTopics>
+			<link xlink:href="529db5ff-9f47-48b8-94fc-53d921c6f008" />
+		</relatedTopics>
+
+	</developerConceptualDocument>
+</topic>
