@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="1900b2bc-a86d-4b5b-a074-f9ee7b603314" revisionNumber="1">
+<topic id="1900b2bc-a86d-4b5b-a074-f9ee7b603314" revisionNumber="2">
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<introduction>
 			<para>
@@ -7,7 +7,13 @@
       </para>
 		</introduction>
 
-		<section>
+    <alert class="caution">
+      <para>
+        Please note that this version of NuGet Package does not work!
+      </para>
+    </alert>
+
+    <section>
 			<title>Changes in This Release</title>
 			<content>
 				<list class="bullet">
