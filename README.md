@@ -4,7 +4,7 @@ BUILDLet Class Library for JBIG Image
 Introduction
 ------------
 
-This project provides *.net* class library for JBIG (Joint Bi-level Image experts Group) Imageing.
+This project provides *.net* class library for JBIG (Joint Bi-level Image experts Group) Image.
 
 Description
 -----------
@@ -38,6 +38,23 @@ Build and Test
 --------------
 
 This project (Visual Studio Solution) is built and tested on Visual Studio.
+
+Remarks
+-------
+
+The following NuGet Packages might be incompatible with Test Project of this solution.
+
+- **MSTest.Adapter** 2.2.4 (or later)
+- **MSTest.TestFramework** 2.2.4 (or later)
+
+So, we have kept these Nuget Packages at the following version.
+
+- **MSTest.Adapter** 2.2.3
+- **MSTest.TestFramework** 2.2.3
+
+The following packages will be updated when **MSTest.Adapter** will be updated from 2.2.3 to 2.2.4.
+
+<img src="./README/MSTest.Adapter.2.2.3_to_2.2.4.png" alt="Updated Package of MSTest.Adapter" width="450">
 
 License
 -------

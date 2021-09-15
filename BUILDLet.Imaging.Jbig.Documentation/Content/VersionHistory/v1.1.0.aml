@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="1900b2bc-a86d-4b5b-a074-f9ee7b603314" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>
+        Version 1.1.0 was released on September 15th, 2021.
+      </para>
+		</introduction>
+
+		<section>
+			<title>Changes in This Release</title>
+			<content>
+				<list class="bullet">
+
+          <listItem>
+            <para>
+              Name of <codeInline>BUILDLet.Imaging.Jbig.Jbig</codeInline> class is changed into
+              <codeEntityReference qualifyHint="true">T:BUILDLet.Imaging.Jbig.JbigImage</codeEntityReference>.
+            </para>
+          </listItem>
+
+          <listItem>
+						<para>
+              Input of <codeEntityReference>T:System.Byte</codeEntityReference> array for
+              <codeEntityReference qualifyHint="true" autoUpgrade="true" linkText="BUILDLet.Imaging.Jbig.JbigImage.ToBitmap">M:BUILDLet.Imaging.Jbig.JbigImage.ToBitmap(System.String)</codeEntityReference>
+              method was supported.
+            </para>
+					</listItem>
+          
+				</list>
+			</content>
+		</section>
+
+		<relatedTopics>
+			<link xlink:href="dd266954-6be8-4bb6-b468-0671d2f392fb" />
+		</relatedTopics>
+
+	</developerConceptualDocument>
+</topic>

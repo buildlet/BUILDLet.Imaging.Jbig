@@ -28,7 +28,7 @@ namespace BUILDLet.Imaging.Jbig
     /// <summary>
     /// JBIG1 画像ファイルを .net で扱うためのクラスを実装します。
     /// </summary>
-    public static class Jbig
+    public static class JbigImage
     {
         /// <summary>
         /// デフォルトのバッファサイズ
@@ -52,28 +52,46 @@ namespace BUILDLet.Imaging.Jbig
         /// JBIG 画像ファイルから変換された <see cref="Bitmap"/> オブジェクト
         /// </returns>
         /// <remarks>
-        /// <c>Jbig.ToBitmap</c> メソッドは、次のコマンドと同等の処理を行います。
+        /// 次のコマンドと同等の処理を行います。
         /// <code>
         /// jbigtopnm.exe input-file | ppmtobmp.exe > output-file
         /// </code>
         /// </remarks>
-        public static Bitmap ToBitmap(string filepath) => ToBitmap(filepath, Jbig.DefaultBufferSize);
+        public static Bitmap ToBitmap(string filepath) => ToBitmap(filepath, JbigImage.DefaultBufferSize);
 
 
         /// <summary>
-        /// <inheritdoc cref="Jbig.ToBitmap(string)"/>
+        /// バイト配列を JBIG 画像として読み込んで <see cref="System.Drawing.Bitmap"/> オブジェクトに変換します。
+        /// </summary>
+        /// <param name="bytes">
+        /// JBIG 画像として読み込むバイト配列
+        /// </param>
+        /// <returns>
+        /// バイト配列から変換された <see cref="Bitmap"/> オブジェクト
+        /// </returns>
+        /// <remarks>
+        /// 次のコマンドと同等の処理を行います。
+        /// <code>
+        /// standard-input-stream > jbigtopnm.exe - | ppmtobmp.exe > output-file
+        /// </code>
+        /// </remarks>
+        public static Bitmap ToBitmap(byte[] bytes) => ToBitmap(bytes, JbigImage.DefaultBufferSize);
+
+
+        /// <summary>
+        /// <inheritdoc cref="JbigImage.ToBitmap(string)"/>
         /// </summary>
         /// <param name="filepath">
-        /// <inheritdoc cref="Jbig.ToBitmap(string)"/>
+        /// <inheritdoc cref="JbigImage.ToBitmap(string)"/>
         /// </param>
         /// <param name="bufferSize">
         /// jbigtopnm.exe および ppmtobmp.exe の標準出力をリダイレクトする際に使用するバッファのサイズ
         /// </param>
         /// <returns>
-        /// <inheritdoc cref="Jbig.ToBitmap(string)"/>
+        /// <inheritdoc cref="JbigImage.ToBitmap(string)"/>
         /// </returns>
         /// <remarks>
-        /// <inheritdoc cref="Jbig.ToBitmap(string)"/>
+        /// <inheritdoc cref="JbigImage.ToBitmap(string)"/>
         /// </remarks>
         public static Bitmap ToBitmap(string filepath, int bufferSize)
         {
@@ -84,8 +102,43 @@ namespace BUILDLet.Imaging.Jbig
                 throw new FileNotFoundException("File is not found.", filepath);
             }
 
-            // Validate (Buffer Size)
-            if (bufferSize > Jbig.MaxBufferSize)
+            // RETURN
+            return JbigImage.ConvertToBitmap(filepath, bufferSize);
+        }
+
+
+        /// <summary>
+        /// <inheritdoc cref="ToBitmap(byte[])"/>
+        /// </summary>
+        /// <param name="bytes">
+        /// <inheritdoc cref="ToBitmap(byte[])"/>
+        /// </param>
+        /// <param name="bufferSize">
+        /// <inheritdoc cref="ToBitmap(string, int)"/>
+        /// </param>
+        /// <returns>
+        /// <inheritdoc cref="ToBitmap(byte[])"/>
+        /// </returns>
+        /// <remarks>
+        /// <inheritdoc cref="ToBitmap(byte[])"/>
+        /// </remarks>
+        public static Bitmap ToBitmap(byte[] bytes, int bufferSize) => JbigImage.ConvertToBitmap("-", bufferSize, bytes);
+
+
+        private static Bitmap ConvertToBitmap(string inputFileName, int bufferSize, byte[] standardInput = null)
+        {
+            // Flag of Redirecting Standard Input Stream of "jbigtopnm.exe"
+            var redirectStandardInput = inputFileName.CompareTo("-") == 0;
+
+            // Validation (Standard Input Stream Redirect)
+            if (redirectStandardInput && (standardInput == null))
+            {
+                // ERROR
+                throw new ArgumentException($"{nameof(standardInput)} is null, even though {nameof(inputFileName)} is \"-\".", nameof(standardInput));
+            }
+
+            // Validation (Buffer Size)
+            if (bufferSize > JbigImage.MaxBufferSize)
             {
                 // ERROR
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
@@ -106,7 +159,8 @@ namespace BUILDLet.Imaging.Jbig
                 jbigtopnm.StartInfo = new ProcessStartInfo
                 {
                     FileName = jbigtopnm_filename,
-                    Arguments = filepath,
+                    Arguments = inputFileName,
+                    RedirectStandardInput = redirectStandardInput,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
                     UseShellExecute = false
@@ -114,6 +168,17 @@ namespace BUILDLet.Imaging.Jbig
 
                 // START jbigtopnm.exe
                 jbigtopnm.Start();
+
+
+                // Redirecting Standard Input Stream of "jbigtopnm.exe"
+                if (redirectStandardInput)
+                {
+                    // Write to Standard Input of ppmtobmp.exe
+                    using (BinaryWriter writer = new(jbigtopnm.StandardInput.BaseStream))
+                    {
+                        writer.Write(standardInput);
+                    }
+                }
 
 
                 // Read from Standard Output of jbigtopnm.exe
