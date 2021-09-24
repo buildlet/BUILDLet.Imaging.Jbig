@@ -39,7 +39,7 @@
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <HelpTitle>BUILDLet Class Library for JBIG Image</HelpTitle>
-    <HelpFileVersion>1.1.1.0</HelpFileVersion>
+    <HelpFileVersion>1.1.2.0</HelpFileVersion>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceContainer>False</RootNamespaceContainer>
@@ -73,6 +73,7 @@
     <Folder Include="media" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\VersionHistory\v1.1.2.aml" />
     <None Include="Content\VersionHistory\v1.1.1.aml" />
     <None Include="Content\VersionHistory\v1.1.0.aml" />
     <None Include="Content\About.aml" />

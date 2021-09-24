@@ -70,7 +70,7 @@ namespace BUILDLet.Imaging.Jbig.Tests
         [DataRow("ccitt8", "EE-02-3A-4F-38-43-20-59-FF-1F-A8-C6-E6-4C-1A-CF")]
         public void ToBitmapTest2(string filename, string filehash)
         {
-            // ARRANGE
+            // ARRANGE:
 
             // Remove File
             File.Delete($"{filename}a.bmp");
@@ -86,6 +86,39 @@ namespace BUILDLet.Imaging.Jbig.Tests
 
             // ASSERT
             Assert.AreEqual(filehash, BitConverter.ToString(MD5.Create().ComputeHash(File.OpenRead($"{filename}.bmp"))));
+        }
+
+
+        [TestMethod]
+        public void ToBitmapTest3()
+        {
+            var filename = "ccitt1";
+            var buffer_size = 10 * 1000 * 1000;
+
+            // ARRANGE: Remove File
+            File.Delete($"{filename}_special.bmp");
+            File.Delete($"{filename}_special2.bmp");
+
+
+            // ACT (1)
+            var bitmap = JbigImage.ToBitmap($@"TestFiles\{filename}.jbg", buffer_size);
+
+            // Save as Bitmap File
+            bitmap.Save($"{filename}_special.bmp");
+
+
+            // Read Bytes from file
+            var bytes = File.ReadAllBytes($@"TestFiles\{filename}.jbg");
+
+            // ACT (2)
+            var bitmap2 = JbigImage.ToBitmap(bytes, 10 * 1000 * 1000);
+
+            // Save as Bitmap File
+            bitmap.Save($"{filename}_special2.bmp");
+
+
+            // ASSERT
+            // (None)
         }
     }
 }
