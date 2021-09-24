@@ -23,6 +23,8 @@ using System.Diagnostics;  // for Process
 using System.IO;           // for Stream
 using System.Drawing;      // for Bitmap
 
+using BUILDLet.Standard.Diagnostics;  // for DebugInfo
+
 namespace BUILDLet.Imaging.Jbig
 {
     /// <summary>
@@ -43,24 +45,6 @@ namespace BUILDLet.Imaging.Jbig
 
 
         /// <summary>
-        /// JBIG 画像ファイルを読み込んで <see cref="System.Drawing.Bitmap"/> オブジェクトに変換します。
-        /// </summary>
-        /// <param name="filepath">
-        /// 読み込む JBIG 画像ファイルのパス
-        /// </param>
-        /// <returns>
-        /// JBIG 画像ファイルから変換された <see cref="Bitmap"/> オブジェクト
-        /// </returns>
-        /// <remarks>
-        /// 次のコマンドと同等の処理を行います。
-        /// <code>
-        /// jbigtopnm.exe input-file | ppmtobmp.exe > output-file
-        /// </code>
-        /// </remarks>
-        public static Bitmap ToBitmap(string filepath) => ToBitmap(filepath, JbigImage.DefaultBufferSize);
-
-
-        /// <summary>
         /// バイト配列を JBIG 画像として読み込んで <see cref="System.Drawing.Bitmap"/> オブジェクトに変換します。
         /// </summary>
         /// <param name="bytes">
@@ -75,7 +59,43 @@ namespace BUILDLet.Imaging.Jbig
         /// standard-input-stream > jbigtopnm.exe - | ppmtobmp.exe > output-file
         /// </code>
         /// </remarks>
-        public static Bitmap ToBitmap(byte[] bytes) => ToBitmap(bytes, JbigImage.DefaultBufferSize);
+        public static Bitmap ToBitmap(byte[] bytes) => JbigImage.ToBitmap(bytes, JbigImage.DefaultBufferSize);
+
+
+        /// <summary>
+        /// <inheritdoc cref="JbigImage.ToBitmap(byte[])"/>
+        /// </summary>
+        /// <param name="bytes">
+        /// <inheritdoc cref="JbigImage.ToBitmap(byte[])"/>
+        /// </param>
+        /// <param name="bufferSize">
+        /// jbigtopnm.exe および ppmtobmp.exe の標準出力をリダイレクトする際に使用するバッファのサイズ
+        /// </param>
+        /// <returns>
+        /// <inheritdoc cref="JbigImage.ToBitmap(byte[])"/>
+        /// </returns>
+        /// <remarks>
+        /// <inheritdoc cref="JbigImage.ToBitmap(byte[])"/>
+        /// </remarks>
+        public static Bitmap ToBitmap(byte[] bytes, int bufferSize) => JbigImage.ConvertToBitmap("-", bufferSize, bytes);
+
+
+        /// <summary>
+        /// JBIG 画像ファイルを読み込んで <see cref="System.Drawing.Bitmap"/> オブジェクトに変換します。
+        /// </summary>
+        /// <param name="filepath">
+        /// 読み込む JBIG 画像ファイルのパス
+        /// </param>
+        /// <returns>
+        /// JBIG 画像ファイルから変換された <see cref="Bitmap"/> オブジェクト
+        /// </returns>
+        /// <remarks>
+        /// 次のコマンドと同等の処理を行います。
+        /// <code>
+        /// jbigtopnm.exe input-file | ppmtobmp.exe > output-file
+        /// </code>
+        /// </remarks>
+        public static Bitmap ToBitmap(string filepath) => JbigImage.ToBitmap(filepath, JbigImage.DefaultBufferSize);
 
 
         /// <summary>
@@ -107,24 +127,6 @@ namespace BUILDLet.Imaging.Jbig
         }
 
 
-        /// <summary>
-        /// <inheritdoc cref="ToBitmap(byte[])"/>
-        /// </summary>
-        /// <param name="bytes">
-        /// <inheritdoc cref="ToBitmap(byte[])"/>
-        /// </param>
-        /// <param name="bufferSize">
-        /// <inheritdoc cref="ToBitmap(string, int)"/>
-        /// </param>
-        /// <returns>
-        /// <inheritdoc cref="ToBitmap(byte[])"/>
-        /// </returns>
-        /// <remarks>
-        /// <inheritdoc cref="ToBitmap(byte[])"/>
-        /// </remarks>
-        public static Bitmap ToBitmap(byte[] bytes, int bufferSize) => JbigImage.ConvertToBitmap("-", bufferSize, bytes);
-
-
         private static Bitmap ConvertToBitmap(string inputFileName, int bufferSize, byte[] standardInput = null)
         {
             // Flag of Redirecting Standard Input Stream of "jbigtopnm.exe"
@@ -152,10 +154,10 @@ namespace BUILDLet.Imaging.Jbig
             var buffer = new byte[bufferSize];
 
 
-            // for jbigtopnm.exe
+            // for "jbigtopnm.exe"
             using (Process jbigtopnm = new())
             {
-                // Set StartInfo to jbigtopnm.exe
+                // Set StartInfo to "jbigtopnm.exe"
                 jbigtopnm.StartInfo = new ProcessStartInfo
                 {
                     FileName = jbigtopnm_filename,
@@ -166,45 +168,51 @@ namespace BUILDLet.Imaging.Jbig
                     UseShellExecute = false
                 };
 
-                // START jbigtopnm.exe
+
+                // START "jbigtopnm.exe"
                 jbigtopnm.Start();
 
+#if DEBUG
+                Debug.WriteLine($"Process of \"{jbigtopnm_filename}\" has started.", DebugInfo.FullName);
+#endif
 
-                // Redirecting Standard Input Stream of "jbigtopnm.exe"
+                // Redirect Standard Input Stream of "jbigtopnm.exe"
                 if (redirectStandardInput)
                 {
-                    // Write to Standard Input of ppmtobmp.exe
+                    // Write to Standard Input Stream of "jbigtopnm.exe"
                     using (BinaryWriter writer = new(jbigtopnm.StandardInput.BaseStream))
                     {
                         writer.Write(standardInput);
                     }
                 }
 
-
-                // Read from Standard Output of jbigtopnm.exe
+                // Read from Standard Output Stream of "jbigtopnm.exe"
                 using (BinaryReader reader = new(jbigtopnm.StandardOutput.BaseStream))
                 {
                     buffer = reader.ReadBytes(bufferSize);
                 }
 
-
-                // Wait for EXIT jbigtopnm.exe
+                // Wait for EXIT "jbigtopnm.exe"
                 jbigtopnm.WaitForExit();
+
+#if DEBUG
+                Debug.WriteLine($"Process of \"{jbigtopnm_filename}\" has exited.", DebugInfo.FullName);
+#endif
 
                 // Check Exit Code
                 if (jbigtopnm.ExitCode != 0)
                 {
                     // ERROR
-                    throw new InvalidDataException($"Non Zero Exit code ({jbigtopnm.ExitCode}) is returned from {jbigtopnm_filename}.");
+                    throw new InvalidDataException($"Non Zero Exit code ({jbigtopnm.ExitCode}) is returned from \"{jbigtopnm_filename}\".");
                 }
             }
-            // for jbgtopnm.exe
+            // for "jbgtopnm.exe"
 
 
-            // for ppmtobmp.exe
+            // for "ppmtobmp.exe"
             using (Process ppmtobmp = new())
             {
-                // Set StartInfo to jbigtopnm.exe
+                // Set StartInfo to "ppmtobmp.exe"
                 ppmtobmp.StartInfo = new ProcessStartInfo
                 {
                     FileName = ppmtobmp_filename,
@@ -214,32 +222,38 @@ namespace BUILDLet.Imaging.Jbig
                     UseShellExecute = false,
                 };
 
-                // START ppmtobmp.exe
+
+                // START "ppmtobmp.exe"
                 ppmtobmp.Start();
 
+#if DEBUG
+                Debug.WriteLine($"Process of \"{ppmtobmp_filename}\" has started.", DebugInfo.FullName);
+#endif
 
-                // Write to Standard Input of ppmtobmp.exe
+                // Write to Standard Input Stream of "ppmtobmp.exe"
                 using (BinaryWriter writer = new(ppmtobmp.StandardInput.BaseStream))
                 {
                     writer.Write(buffer);
                 }
 
-
-                // Read from Standard Output of ppmtobmp.exe
+                // Read from Standard Output Stream of "ppmtobmp.exe"
                 using (BinaryReader reader = new(ppmtobmp.StandardOutput.BaseStream))
                 {
                     buffer = reader.ReadBytes(bufferSize);
                 }
 
-
-                // Wait for EXIT ppmtobmp.exe 
+                // Wait for EXIT "ppmtobmp.exe "
                 ppmtobmp.WaitForExit();
+
+#if DEBUG
+                Debug.WriteLine($"Process of \"{ppmtobmp_filename}\" has exited.", DebugInfo.FullName);
+#endif
 
                 // Check Exit Code
                 if (ppmtobmp.ExitCode != 0)
                 {
                     // ERROR
-                    throw new InvalidDataException($"Non Zero Exit code ({ppmtobmp.ExitCode}) is returned from {ppmtobmp_filename}.");
+                    throw new InvalidDataException($"Non Zero Exit code ({ppmtobmp.ExitCode}) is returned from \"{ppmtobmp_filename}\".");
                 }
             }
             // for ppmtobmp.exe
